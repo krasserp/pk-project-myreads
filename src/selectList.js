@@ -13,20 +13,21 @@ const selectItems = [
 
 class SelectList extends Component{
 
-    state= {
-      selected: this.props.status
-    }
 
     updateSelection = (value) => {
-      this.setState({selected: value.trim()})
+      
+      this.props.updateShelfStatus(value.trim());
+
     }
+
+
 
     render(){
 
     return (
 
           <div className={selectClass}>
-               <select value={this.state.selected} onChange={(event) => this.updateSelection(event.target.value)}>
+               <select value={this.props.status} onChange={(event) => this.updateSelection(event.target.value)}>
                 {selectItems.map((item,i) => (
                   <option key={i} value={item.value} disabled={item.disabled} >{item.text}</option>
                 ))}
