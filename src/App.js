@@ -7,55 +7,68 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 
 
-class BooksApp extends React.Component {
-  state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    books: []
-  }
+/**
+ * Class for books application.
+ *
+ * @class      BooksApp (name)  handles the application
+ */
 
+
+class BooksApp extends React.Component {
+
+  state = {
+    books: []
+  };
+
+  /**
+   * fetch books from API
+   */
   componentDidMount(){
-    console.log('main app mounted? ');
     BooksAPI.getAll().then((books) => {
       this.setState({books});
-      console.log('updated books state');
     })
   }
 
 
+  /**
+   * on update fetch books from API
+   */
   componentWillReceiveProps(){
     BooksAPI.getAll().then((books) => {
-      this.setState({books})
+      this.setState({books});
     })
   }
 
+
+  /**
+   * { Takes the book id and status to update the status of that book }
+   *
+   * @param      {string}  id     - The identifier
+   * @param      {string}  status - The status
+   */
   updateBookCategory(id,status){
 
     this.setState( (state) => ({
-      
+
       books: state.books.map( item => {
         let book;
         if(item.id === id){
           item.shelf = status;
           book = item;
         } else {
-          book = item
+          book = item;
         }
         return book;
-    })
+      })
     })
     )
 
     let theBook = this.state.books.filter(item => item.id === id);
     //don't get why but seems the id needs to be set again?
     theBook.id = id;
-    //console.log(theBook, ' yes that one',theBook.id, status, id);
 
-    BooksAPI.update(theBook,status).then((result)=> console.log(result));
+    BooksAPI.update(theBook,status)
+      .then((result) => console.log('update sucessfull', result));
   }
 
 
@@ -63,9 +76,9 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         <Route  path="/search" render={({history}) =>(
-          <SearchAndResults 
-            booklist={this.state.books}  
-            updateBook={(id,status)=>{this.updateBookCategory(id,status)}} 
+          <SearchAndResults
+            booklist={this.state.books}
+            updateBook={(id,status)=>{this.updateBookCategory(id,status)}}
           />
         )}
         />
@@ -97,4 +110,4 @@ class BooksApp extends React.Component {
   }
 }
 
-export default BooksApp
+export default BooksApp;

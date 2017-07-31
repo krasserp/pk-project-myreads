@@ -2,40 +2,53 @@ import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import BookShelf from './bookshelfs'
 import * as BooksAPI from './BooksAPI'
+import PropTypes from 'prop-types'
 
+
+/**
+ * Class for search and results.
+ *
+ * @class      SearchAndResults (name)
+ *
+ * prop       {array} booklist - Array of all books returned from the API call
+ * prop       {function} updateBook - Takes the book id and status to update the status of that book
+ *
+ */
 
 class SearchAndResults extends Component{
+
+    static propTypes = {
+      booklist: PropTypes.array.isRequired,
+      updateBook: PropTypes.func.isRequired
+    };
 
     state= {
         books: [],
         query: '',
         booklist: [],
         booklistIds:[]
-    }
+    };
 
     updateQuery = (query) => {
         this.setState({query: query.trim()});
         BooksAPI.search(query.trim(),20).then((result) => {
 
-            //let allBookListIds = this.state.booklist.map(item => item.id);
             if(result !== undefined && result.constructor === Array){
 
                 let setStateList = result.map(item => {
                     if(this.state.booklistIds.indexOf(item.id) > -1){
-                        let foundItem = this.state.booklist.filter(book=>book.id === item.id)
-                        item.shelf = foundItem[0].shelf
-                        console.log(`found ${item.title}, id : ${item.id} as a match at indexallBookListIds.indexOf(item.id) set to this shelf ${item.shelf}` );
-
+                        let foundItem = this.state.booklist.filter(book=>book.id === item.id);
+                        item.shelf = foundItem[0].shelf;
                     }
                     return item;
                 });
-                console.log(setStateList);
+
                 this.setState({books :setStateList});
             }
             else{
-               this.setState({books: []}); 
+               this.setState({books: []});
             }
-            
+
         });
 
     }
@@ -45,8 +58,7 @@ class SearchAndResults extends Component{
 
         let updatedBooks = this.state.books.map(book => {
             if(book.id === id){
-                console.log(`need to chagne this one book mate ${book.id} setting ${book.shelf} to ${status}`);
-                book.shelf = status
+                book.shelf = status;
             }
             return book;
         })
@@ -57,7 +69,7 @@ class SearchAndResults extends Component{
 
 
     componentWillMount(){
-        
+
         this.setState({
             booklist: this.props.booklist,
             booklistIds : this.props.booklist.map(item => item.id)
@@ -84,20 +96,19 @@ class SearchAndResults extends Component{
                 booklistIds : this.props.booklist.map(item => item.id)
             });
         }
-        
+
 
     }
 
     render(){
 
 
-
-        const {query} = this.state 
+        const {query} = this.state
 
         return(
             <div className="search-books">
             <div className="search-books-bar">
-              <Link 
+              <Link
                 to='/'
                 className="close-search"
                 >
@@ -105,11 +116,10 @@ class SearchAndResults extends Component{
                 </Link>
               <div className="search-books-input-wrapper">
 
-                <input type="text" 
+                <input type="text"
                     placeholder="Search by title or author"
                     value={query}
                     onChange={(event) => this.updateQuery(event.target.value)}
-
                 />
 
               </div>
@@ -131,4 +141,4 @@ class SearchAndResults extends Component{
 
 }
 
-export default SearchAndResults
+export default SearchAndResults;
