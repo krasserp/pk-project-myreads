@@ -72,7 +72,7 @@ class SearchAndResults extends Component{
 
         this.setState({
             booklist: this.props.booklist,
-            booklistIds : this.props.booklist.map(item => item.id)
+            booklistIds: this.props.booklist.map(item => item.id)
         });
     }
 
@@ -93,7 +93,7 @@ class SearchAndResults extends Component{
         else{
             this.setState({
                 booklist: this.props.booklist,
-                booklistIds : this.props.booklist.map(item => item.id)
+                booklistIds: this.props.booklist.map(item => item.id)
             });
         }
 

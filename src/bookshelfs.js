@@ -45,7 +45,7 @@ class BookShelf extends Component{
         let filterd = props.listType !== 'search' ? props.books.filter( item => item.shelf === props.listType) : props.books;
 
         this.setState({
-            books : filterd.sort(sortBy('title'))
+            books: filterd.sort(sortBy('title'))
         });
 
     }

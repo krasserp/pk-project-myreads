@@ -41,7 +41,7 @@ class BooksApp extends React.Component {
 
 
   /**
-   * { Takes the book id and status to update the status of that book }
+   * Takes the book id and status to update the status of that book
    *
    * @param      {string}  id     - The identifier
    * @param      {string}  status - The status
@@ -64,10 +64,8 @@ class BooksApp extends React.Component {
     )
 
     let theBook = this.state.books.filter(item => item.id === id);
-    //don't get why but seems the id needs to be set again?
-    theBook.id = id;
 
-    BooksAPI.update(theBook,status)
+    BooksAPI.update(theBook[0],status)
       .then((result) => console.log('update sucessfull', result));
   }
 
