@@ -30,15 +30,6 @@ class BooksApp extends React.Component {
   }
 
 
-  /**
-   * on update fetch books from API
-   */
-  componentWillReceiveProps(){
-    BooksAPI.getAll().then((books) => {
-      this.setState({books});
-    })
-  }
-
 
   /**
    * { Takes the book id and status to update the status of that book }
@@ -48,27 +39,33 @@ class BooksApp extends React.Component {
    */
   updateBookCategory(id,status){
 
-    this.setState( (state) => ({
+    BooksAPI.update({id:id},status)
+      .then((result) => {
 
-      books: state.books.map( item => {
-        let book;
-        if(item.id === id){
-          item.shelf = status;
-          book = item;
-        } else {
-          book = item;
+        let alreadyInState = false;
+
+        this.setState( (state) => ({
+          books: state.books.map( item => {
+
+            if(item.id === id){
+              item.shelf = status;
+              alreadyInState = true;
+            }
+            return item;
+          })
+        })
+
+        );
+
+        if(!alreadyInState){
+          BooksAPI.get(id).then((book) => {
+            this.setState(state => ({
+              books: state.books.filter(b => b.id !== book.id).concat([ book ])
+            }));
+        });
         }
-        return book;
-      })
-    })
-    )
+    });
 
-    let theBook = this.state.books.filter(item => item.id === id);
-    //don't get why but seems the id needs to be set again?
-    theBook.id = id;
-
-    BooksAPI.update(theBook,status)
-      .then((result) => console.log('update sucessfull', result));
   }
 
 

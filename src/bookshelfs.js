@@ -25,10 +25,6 @@ class BookShelf extends Component{
     };
 
 
-    state = {
-        books: []
-    };
-
   /**
    * Takes the book id and status to update the status of that book
    *
@@ -36,23 +32,14 @@ class BookShelf extends Component{
    * @param      {string}  status - The status
    */
     updateBook(id,status){
+      console.log('id and status is ', id, status);
         this.props.updateBook(id,status);
     }
 
-
-    componentWillReceiveProps(props){
-
-        let filterd = props.listType !== 'search' ? props.books.filter( item => item.shelf === props.listType) : props.books;
-
-        this.setState({
-            books : filterd.sort(sortBy('title'))
-        });
-
-    }
-
-
-
     render(){
+
+        let filterd = this.props.listType !== 'search' ? this.props.books.filter( item => item.shelf === this.props.listType) : this.props.books;
+        filterd =  filterd.sort(sortBy('title'));
 
         return(
 
@@ -60,7 +47,7 @@ class BookShelf extends Component{
                   <h2 className="bookshelf-title">{this.props.shelfTitle}</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                        {this.state.books.map((item,i) => (
+                        {filterd.map((item,i) => (
 
                             <li key={i}>
                                 <Book bookItem={item} updateBook={(id,status)=>{this.updateBook(id,status)}} />

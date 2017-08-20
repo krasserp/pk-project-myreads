@@ -54,6 +54,7 @@ class SearchAndResults extends Component{
     }
 
     updateBook(id,status){
+
         this.props.updateBook(id,status);
 
         let updatedBooks = this.state.books.map(book => {
